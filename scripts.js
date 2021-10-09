@@ -19,7 +19,6 @@ async function swap(arr, a, b){
 var ix = 0;
 
 function bubbleSort(){   
-
     if(ix < values.length){       
         for (var n = 0; n < values.length; n++) {
             var a = values[n];
@@ -31,9 +30,7 @@ function bubbleSort(){
             };       
         }    
     } 
-
     ix++;
-
 };
 
 async function quickSort(arr,start,end){
@@ -73,6 +70,20 @@ async function partition(arr,start,end){
 };
 
 
+async function SelectionSort(){
+    var i, j, min_idx;
+ 
+    for (i = 0; i < values.length-1; i++){
+        min_idx = i;
+        for (j = i + 1; j < values.length; j++)
+        if (values[j] < values[min_idx])
+            min_idx = j;
+
+
+        await swap(values,min_idx, i);
+    }
+};
+
 function drawLine(x,y,xx,yy,color){
     ctx.lineWidth = 1;
     ctx.strokeStyle = color;
@@ -84,7 +95,7 @@ function drawLine(x,y,xx,yy,color){
 };
 
 
-var values;
+var values ;
 
 function setRandomValues(){   
     for ( i = 0; i < values.length; i++) {
@@ -103,24 +114,47 @@ function sleep(ms){
     return new Promise(resolve => setTimeout(resolve , ms));
 };
 
+var sort;
+
+function setSortSelection(){
+    sort = 's';
+    setRandomValues();
+};
+
+
+function setSortBubble(){
+    sort = 'b';
+    setRandomValues();
+};
+
+function setSortQuick(){
+    sort = 'q';
+    setRandomValues();
+};
+
 function draw(){
 
     ctx.fillStyle = 'rgb(0,0,0)';
     ctx.fillRect(0,0,canvas.width,canvas.height);
 
-    quickSort(values , 0, values.length - 1);  
-    // bubbleSort();
-
+    if(sort === 'b'){
+         bubbleSort();
+    }
+    else if(sort === 'q'){
+        quickSort(values , 0, values.length - 1); 
+    } 
+    else if(sort === 's'){
+        SelectionSort();
+    } 
     for (var k = 0; k < values.length; k++) {
-
         var color = 'white';
-
         drawLine( k , height , k , height - values[k] , color );                
     };   
 
 
     requestAnimationFrame(draw);
 };
+
 
 setup();
 draw();
